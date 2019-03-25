@@ -1,0 +1,106 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace conceet
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Dictionary<string, int> bandTime = new Dictionary<string, int>();
+            Dictionary<string, List<string>> bandSingers = new Dictionary<string, List<string>>();
+            int totaltime = 0;
+            while (true)
+            {
+
+                string input = Console.ReadLine();
+                if (input == "start of concert") { break; }
+                string[] tokens = input.Split(';');
+                string command = tokens[0];
+                string bandName = tokens[1].TrimStart();
+                if (command == "Play")
+                {
+                    int timeconcert = int.Parse(tokens[2].TrimStart());
+                    if (!bandTime.ContainsKey(bandName))
+                    {
+                        bandTime[bandName] = timeconcert;
+                        totaltime += timeconcert;
+                    }
+                    else
+                    {
+                        bandTime[bandName] += timeconcert;
+                        totaltime += timeconcert;
+                    }
+
+                }
+                else if (command == "Add")
+                {
+
+                    string[] singer = tokens[2].Split(',');
+                    for (int i = 0; i < singer.Length; i++)
+                    {
+                        string currentSinger = singer[i].TrimStart();
+
+
+                        if (!bandSingers.ContainsKey(bandName))
+                        {
+                            bandSingers[bandName] = new List<string>();
+                            bandSingers[bandName].Add(currentSinger);
+                        }
+                        else
+                        {
+                            if (!bandSingers[bandName].Contains(currentSinger))
+                            {
+                                bandSingers[bandName].Add(currentSinger);
+                            }
+
+                        }
+                    }
+
+
+
+                }
+
+
+
+
+
+            }
+            //foreach (var item in bandTime.OrderByDescending(x=> x.Key))
+            //{
+            //    Console.WriteLine(item.Key.TrimStart());
+            //    break;
+            //}
+            var groupName = Console.ReadLine();
+
+            Console.WriteLine($"Total time: {totaltime}");
+            foreach (var kvp in bandTime.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
+            {
+                Console.WriteLine($"{kvp.Key.TrimStart()} -> {kvp.Value}");
+            }
+            Console.WriteLine(groupName);
+            foreach (var band in bandSingers)
+            {
+                var name = band.Key.TrimStart();
+                if (name == groupName)
+                {
+                    foreach (var singers in bandSingers[name])
+                    {
+                        Console.WriteLine($"=> { singers}");
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}
+
+    
+
+
+
+    
+
